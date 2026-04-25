@@ -1,0 +1,38 @@
+# ============================================================
+# Smart AI Study Companion — Backend Dependencies
+# ============================================================
+# Install with: uv pip install -r requirements.txt
+# Python 3.10+ required
+
+# --- Web Framework ---
+fastapi==0.111.0          # REST API framework
+uvicorn[standard]==0.29.0 # ASGI server to run FastAPI
+
+# --- LLM (Groq — free, fast Llama-3) ---
+groq==0.9.0               # Official Groq Python SDK
+
+# --- Embeddings (local, no API key needed) ---
+sentence-transformers==2.7.0  # Loads all-MiniLM-L6-v2 model
+
+# --- Vector Database (local, persistent) ---
+chromadb==0.5.3           # Embedded vector store
+
+# --- Document Parsing ---
+pdfplumber==0.11.0        # Extract text from PDFs
+pytesseract==0.3.10       # OCR wrapper for Tesseract (images)
+Pillow==10.3.0            # Image handling (needed by pytesseract)
+
+# --- Speech-to-Text (local Whisper) ---
+openai-whisper==20231117  # Runs Whisper base model locally
+
+# --- Text-to-Speech ---
+gTTS==2.5.1               # Google TTS — converts text to MP3
+
+# --- Text Chunking ---
+langchain-text-splitters==0.2.1  # RecursiveCharacterTextSplitter only
+
+# --- Utilities ---
+python-dotenv==1.0.1      # Load .env variables
+python-multipart==0.0.9   # FastAPI file upload support
+pydantic==2.7.1           # Data validation (ships with FastAPI)
+numpy==1.26.4             # Required by sentence-transformers

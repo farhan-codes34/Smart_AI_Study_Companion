@@ -1,0 +1,25 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# uv — do NOT ignore uv.lock (commit it for reproducible installs)
+
+# Data (user uploads, embeddings, generated audio)
+backend/data/uploads/
+backend/data/chroma_db/
+backend/data/audio/
+
+# Whisper model cache
+~/.cache/whisper/
+
+# OS
+.DS_Store
+Thumbs.db
