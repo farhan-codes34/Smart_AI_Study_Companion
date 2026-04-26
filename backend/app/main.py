@@ -9,7 +9,6 @@ This file:
 """
 
 import os
-import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -35,11 +34,10 @@ def create_app() -> FastAPI:
     )
 
     # ── CORS ─────────────────────────────────────────────────────────────────
-    # Allows Streamlit (running on localhost:8501) to call this API.
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:8501", "http://127.0.0.1:8501"],
-        allow_credentials=True,
+        allow_origins=["*"],
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -65,27 +63,6 @@ app = create_app()
 
 @app.on_event("startup")
 async def startup_event():
-    # Ensure all data directories exist
     for folder in [settings.UPLOAD_DIR, settings.CHROMA_DB_PATH, settings.AUDIO_DIR]:
         os.makedirs(folder, exist_ok=True)
-
-    # Pre-load the embedding model at startup.
-    # WHY asyncio.to_thread?
-    #   SentenceTransformer.encode() is a blocking (synchronous) call.
-    #   Running it directly inside an async function would freeze the
-    #   entire event loop. asyncio.to_thread() runs it in a background
-    #   thread so FastAPI stays responsive while the model loads.
-    # Pre-load embedding model
-    print("⏳ Pre-loading embedding model...")
-    from app.services.embedder import embed_texts
-    await asyncio.to_thread(embed_texts, ["warmup"])
-    print("✅ Embedding model ready.")
-
-    # Pre-load Whisper model (STT) — ~140 MB download on first run
-    print("⏳ Pre-loading Whisper STT model...")
-    from app.services.stt_service import _get_model
-    await asyncio.to_thread(_get_model)
-    print("✅ Whisper model ready.")
-
     print(f"✅ {settings.APP_TITLE} v{settings.APP_VERSION} started.")
-    print(f"   Docs: http://127.0.0.1:8000/docs")
