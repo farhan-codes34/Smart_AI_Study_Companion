@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-pip install -r backend/requirements.txt
+pip install setuptools==68.0.0
+pip install -r requirements.txt --no-build-isolation
