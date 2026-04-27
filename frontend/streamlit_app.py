@@ -369,7 +369,7 @@ st.markdown("### Backend Status")
 BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
 
 try:
-    resp = requests.get(f"{BACKEND_URL}/health", timeout=3)
+    resp = requests.get(f"{BACKEND_URL}/health", timeout=60)
     if resp.status_code == 200:
         data = resp.json()
         st.markdown(
@@ -379,6 +379,8 @@ try:
     else:
         st.markdown('<div class="status-err">⚠️ API responded with unexpected status.</div>',
                     unsafe_allow_html=True)
+except requests.exceptions.ReadTimeout:
+    st.warning("⏳ Backend is waking up (free tier cold start). Please wait 30–50 seconds and refresh the page.")
 except requests.exceptions.ConnectionError:
     st.markdown("""<div class="status-err">
     ❌ Cannot reach the FastAPI backend. Start it with:<br><br>
